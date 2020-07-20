@@ -54,7 +54,7 @@ public class HelloController {
 
     @GetMapping("/math/volume/{x}/{y}/{z}")
     public String postSum(@PathVariable double x, @PathVariable double y, @PathVariable double z) {
-        return String.valueOf(x*y*z);
+        return "The volume of a " + x + "x" + y + "x" + z + " rectangle is " + String.valueOf(x*y*z);
     }
 
     @PostMapping("/math/area")
