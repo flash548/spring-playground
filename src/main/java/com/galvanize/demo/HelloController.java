@@ -1,9 +1,6 @@
 package com.galvanize.demo;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class HelloController {
@@ -33,4 +30,10 @@ public class HelloController {
         for (double x : nums) { accum += x; }
         return String.valueOf(accum);
     }
+
+    @GetMapping("/math/volume/{x}/{y}/{z}")
+    public String postSum(@PathVariable double x, @PathVariable double y, @PathVariable double z) {
+        return String.valueOf(x*y*z);
+    }
+
 }
