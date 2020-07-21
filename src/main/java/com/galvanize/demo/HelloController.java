@@ -1,7 +1,16 @@
 package com.galvanize.demo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.geom.Area;
+import java.util.*;
 
 @RestController
 public class HelloController {
@@ -73,4 +82,107 @@ public class HelloController {
             default: return "Invalid";
         }
     }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    public static class Passenger {
+        String firstName;
+        String lastName;
+
+        public Passenger(String firstName, String lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+
+        @JsonProperty(value="FirstName")
+        public String getFirstName() {
+            return firstName;
+        }
+
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+
+        @JsonProperty("LastName")
+        public String getLastName() {
+            return lastName;
+        }
+
+        public void setLastName(String lastName) {
+            this.lastName = lastName;
+        }
+    }
+
+    public static class Ticket {
+        Passenger passenger;
+        double price;
+
+        public Ticket(Passenger passenger, double price) {
+            this.passenger = passenger;
+            this.price = price;
+        }
+
+        @JsonProperty(value="Passenger")
+        public Passenger getPassenger() {
+            return passenger;
+        }
+
+        public void setPassenger(Passenger passenger) {
+            this.passenger = passenger;
+        }
+
+        @JsonProperty(value="Price")
+        public double getPrice() {
+            return price;
+        }
+
+        public void setPrice(double price) {
+            this.price = price;
+        }
+    }
+
+    public static class Flight {
+        Date date;
+        List<Ticket> tickets;
+
+        public Flight(Date date, List<Ticket> tickets) {
+            this.date = date;
+            this.tickets = tickets;
+        }
+
+        @JsonFormat(pattern="yyyy-MM-dd HH:mm")
+        @JsonProperty(value="Departs")
+        public Date getDate() {
+            return date;
+        }
+
+        public void setDate(Date date) {
+            this.date = date;
+        }
+
+        @JsonProperty(value="Tickets")
+        public List<Ticket> getTickets() {
+            return tickets;
+        }
+
+        public void setTickets(List<Ticket> tickets) {
+            this.tickets = tickets;
+        }
+    }
+
+    private Flight testFlight = new Flight(new Date(2017-1900, 03, 21, 14, 34),
+                                Arrays.asList(new Ticket(new Passenger("Bill", "Smith"), 200)));
+
+    private Flight testFlight2 = new Flight(new Date(2017-1900, 03, 21, 14, 34),
+            Arrays.asList(new Ticket(new Passenger("John", null), 400)));
+
+    @GetMapping("/flights/flight")
+    public Flight getFlight() {
+        return testFlight;
+    }
+
+    @GetMapping("/flights")
+    public List<Flight> getFlights() {
+        return Arrays.asList(testFlight, testFlight2);
+    }
+
 }
