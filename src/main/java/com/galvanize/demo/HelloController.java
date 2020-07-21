@@ -175,6 +175,19 @@ public class HelloController {
     private Flight testFlight2 = new Flight(new Date(2017-1900, 03, 21, 14, 34),
             Arrays.asList(new Ticket(new Passenger("John", null), 400)));
 
+    public class TicketTotal {
+
+        private double result = 0.0f;
+
+        public double getResult() {
+            return result;
+        }
+
+        public void setResult(double result) {
+            this.result = result;
+        }
+    }
+
     @GetMapping("/flights/flight")
     public Flight getFlight() {
         return testFlight;
@@ -183,6 +196,18 @@ public class HelloController {
     @GetMapping("/flights")
     public List<Flight> getFlights() {
         return Arrays.asList(testFlight, testFlight2);
+    }
+
+    @PostMapping("/flights/tickets/total")
+    public TicketTotal getTicketTotals(@RequestBody Flight flight) {
+        TicketTotal total = new TicketTotal();
+        double sum = 0.0f;
+        for (Ticket t : flight.getTickets()) {
+            sum += t.price;
+        }
+
+        total.setResult(sum);
+        return total;
     }
 
 }
