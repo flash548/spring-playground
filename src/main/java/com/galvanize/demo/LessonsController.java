@@ -25,13 +25,14 @@ public class LessonsController {
         return this.repository.save(lesson);
     }
     @GetMapping("/{id}")
-    public Lesson getId(@PathVariable String id) {
+    public Lesson getId(@PathVariable String id, HttpServletResponse response) {
         Optional<Lesson> retVal = this.repository.findById(Long.valueOf(id));
         if (retVal.isPresent()) {
             return retVal.get();
         }
         else {
-            return new Lesson();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
         }
     }
 
@@ -45,6 +46,26 @@ public class LessonsController {
         }
 
         return "Done";
+    }
+
+    @PatchMapping("/{id}")
+    public Lesson updateId(@PathVariable String id, @RequestBody Lesson l, HttpServletResponse response) {
+        try {
+            Optional<Lesson> rec = this.repository.findById(Long.valueOf(id));
+            if (rec.isPresent()) {
+                Lesson update = rec.get();
+                update.setTitle(l.getTitle());
+                update.setDeliveredOn(l.getDeliveredOn());
+                return this.repository.save(update);
+            }
+            else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return null;
+            }
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
     }
 
 }
