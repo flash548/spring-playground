@@ -2,6 +2,7 @@ package com.galvanize.demo;
 
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @RestController
@@ -35,11 +36,13 @@ public class LessonsController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteId(@PathVariable String id) {
+    public String deleteId(@PathVariable String id, HttpServletResponse response) {
         try {
             this.repository.deleteById(Long.valueOf(id));
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
 
         return "Done";
     }
