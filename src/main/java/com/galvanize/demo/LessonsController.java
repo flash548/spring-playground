@@ -1,5 +1,6 @@
 package com.galvanize.demo;
 
+import org.springframework.http.converter.json.GsonBuilderUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +64,42 @@ public class LessonsController {
                 return null;
             }
         } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+    }
+
+    @GetMapping("/find/{title}")
+    public Lesson[] searchByTitle(@PathVariable String title, HttpServletResponse response) {
+        try {
+            Lesson[] rec = this.repository.findByTitle(title);
+            if (rec != null) {
+                return rec;
+            }
+            else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return null;
+            }
+        }
+        catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            return null;
+        }
+    }
+
+    @GetMapping("/between")
+    public Lesson[] findBetweenDates(@RequestParam String date1, @RequestParam String date2, HttpServletResponse response) {
+        try {
+            Lesson[] rec = this.repository.findBetweenDates(date1, date2);
+            if (rec != null) {
+                return rec;
+            }
+            else {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                return null;
+            }
+        }
+        catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return null;
         }
