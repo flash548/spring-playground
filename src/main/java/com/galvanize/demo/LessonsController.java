@@ -16,15 +16,16 @@ public class LessonsController {
         this.repository = repository;
     }
 
-    @GetMapping("")
+    @GetMapping("/all")
     public Iterable<Lesson> all() {
         return this.repository.findAll();
     }
 
-    @PostMapping("")
+    @PostMapping("/save")
     public Lesson create(@RequestBody Lesson lesson) {
         return this.repository.save(lesson);
     }
+
     @GetMapping("/{id}")
     public Lesson getId(@PathVariable String id, HttpServletResponse response) {
         Optional<Lesson> retVal = this.repository.findById(Long.valueOf(id));
